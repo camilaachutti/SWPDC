@@ -5,6 +5,7 @@
 package swpdc; 
 
 import suporte.IniciadorHW;
+import dados.GerenciadorDados;
 
 
 /**
@@ -16,7 +17,7 @@ public class SWPDC {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public void main(String[] args) {
         /* A Inicialização foi dividida em 2 fases.A primeira é a POST, que 
          * realiza a verificação de hardware e a segunda é a que ocorre depois
          * e é o relacionada mais oa software */
@@ -35,7 +36,7 @@ public class SWPDC {
      * Iniciação das tarefas de regime permanente (classes ativas).
      */
     public static void iniciarTarefas(){
-        
-   
+        GerenciadorDados gerenciadorDados = new GerenciadorDados();
+        gerenciadorDados.iniciar();
     }
 }

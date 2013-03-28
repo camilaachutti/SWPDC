@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package suporte;
 
 /**
@@ -30,18 +26,6 @@ public class IniciadorHW implements IIniciadorHW{
     }
    
     private void verificarHW(){
-        
-    }
-    
-    private void reconfigurar(){
-        
-    }
-    
-    private void limparFlash(){
-    
-    }
-    
-    private void setFigOBDH(){
-        
+       //talvez seja necessário no futuro para inicializar o simulador.
     }
 }

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package dados;
 
 /**
@@ -18,7 +14,7 @@ public class Endereco {
     public int paginaMSB; //Byte mais significativo do endereço da página.
                             //De acordo com o esquema de paginação utilizado 
                             //nessa versão do SWPDC, esse byte será sempre zero.
-    public double valor; //Endereço dentro da página selecionada. 
+    public int valor; //Endereço dentro da página selecionada. 
                             //De acordo com o esquema de paginação utilizado, 
                             // o endereço poderá variar de 8000h à FFFFh.
 }

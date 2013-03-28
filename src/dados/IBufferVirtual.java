@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package dados;
 
 /**
@@ -16,6 +12,6 @@ public interface IBufferVirtual {
 // - Tamanho do bloco a ser gravado, apagavel - 1 (TRUE), se o buffer tem 
 // autonomia para apagar a si mesmo a cada overlap; ou 0 (FALSE) caso contrário. o retorno - Nenhum.
 
-public void iniciar( /*MemoriaVirtual*/int memoria, double tamBloco, int apagavel);
+public void iniciar( MemoriaVirtual memoria, double tamBloco, int apagavel);
 
 }

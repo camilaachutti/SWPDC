@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package dados;
 
 /**
@@ -13,7 +9,7 @@ package dados;
 //Um Buffer não sabe nada a respeito do conteúdo da memória que ele manipula.
 //A estratégia de manipulação dados é do tipo buffer circular (ring-buffer).
 
-public class BufferVirtual implements IBufferVirtual{
+public class BufferVirtual implements IBufferVirtual, IBuffer{
     
   private int apagavel; //1, se o buffer tem autonomia para apagar a si mesmo a cada overlap.
   private int flgPagErase; //1, se ocorreu erase na página corrente.
@@ -35,7 +31,27 @@ public class BufferVirtual implements IBufferVirtual{
     }
 
     @Override
-    public void iniciar(int memoria, double tamBloco, int apagavel) {
+    public void iniciar(MemoriaVirtual memoria, double tamBloco, int apagavel) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public int estaVazio() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public byte inserir(int dado, byte tamanho) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public byte remover(int dado, byte tamanho) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public byte tamanho() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package dados;
 
 /**
@@ -16,8 +12,8 @@ public interface IGerenciadorDados {
     // inserida no buffer. Retorno - A quantidade de bytes efetivamente inserida
     // no buffer.
     
-    public double adicionar( /*TipoBufferEnum*/int destino, int dado, double tamanho);
-
+    public double adicionar( TipoBufferEnum destino, int dado, byte tamanho);
+        
     // Altera ponteiros do buffer de descarga de memória. 
     // endInicial - Endereço Inicial, endFinal - Endereço Final.
     
@@ -79,7 +75,7 @@ public interface IGerenciadorDados {
     //informação associada, tipo - Indicador do tipo do relato de evento. info -
     //Informação associada ao evento. Deve ser obrigatoriamente um vetor de 5 bytes.
 
-    public void relatarEvento(/* TipoRelatoEventoEnum*/ int tipo, int[] info);
+    public void relatarEvento( TipoRelatoEventoEnum tipo, int[] info);
 
     //Remove dados de um buffer específico, local - Indicador do buffer de
     // origem dos dados a serem removidos, dado - Ponteiro para a área de 
@@ -87,7 +83,7 @@ public interface IGerenciadorDados {
     // tamanho - Quantidade de bytes a serem removidos do buffer.
     //retorno - A quantidade de bytes efetivamente removida do buffer.
     
-    public double remover(/* TipoBufferEnum*/ int local, int dado, double tamanho);
+    public double remover( TipoBufferEnum local, int dado, byte tamanho);
 
 
 }

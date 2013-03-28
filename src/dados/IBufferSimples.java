@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package dados;
 
 /**
@@ -17,7 +13,12 @@ public interface IBufferSimples {
     //area - Ponteiro para o início da memória alocada
     //tamanho - Tamanho da área alocada a ser registrada.
   
-    public void alocar( void area, double tamanho);
+    /**
+     *
+     * @param area
+     * @param tamanho
+     */
+    public void alocar( Object area, byte tamanho);
     
     
 }

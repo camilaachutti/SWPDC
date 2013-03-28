@@ -13,16 +13,16 @@ public interface IBuffer {
     // do dado a ser inserido no buffer, tamanho - Tamanho do dado a ser inserido
     // no buffer. Retorno - A quantidade de dados efetivamente gravada no buffer. 
 
-    public double inserir(int dado, double tamanho);
+    public byte inserir(int dado, byte tamanho);
             
     // Remove dados do buffer, dado - Ponteiro para área de destino dos dados a 
     // serem removidos do buffer, tamanho - Quantidade de bytes a serem removidos. 
     // Retorno - A quantidade de bytes efetivamente removida do buffer.    
 
-    public double remover(int dado, double tamanho);
+    public byte remover(int dado, byte tamanho);
     
     //o Descrição - Retorna o tamanho do buffer.
     // Retorno - O tamanho do buffer em bytes.
 
-    public long tamanho();
+    public byte tamanho();
 }
