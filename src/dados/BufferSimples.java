@@ -28,7 +28,7 @@ public class BufferSimples implements IBufferSimples, IBuffer {
     //Registra alocação
     @Override
     public final void alocar(Object area, byte tamanho) {
-      
+      //e no caso de não ter rolado a alocação correta
         System.out.println("Alocação no Buffer de tamanho" + tamanho + "registrada");
 
        

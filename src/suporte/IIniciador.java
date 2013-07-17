@@ -4,7 +4,7 @@ package suporte;
  *
  * @author cachutti
  */
-public interface IIniciadorHW {
+public interface IIniciador {
         
     public int iniciar();
-}
+   }
