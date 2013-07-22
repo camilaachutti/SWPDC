@@ -22,17 +22,10 @@ public class SWPDC {
          * e é o relacionada mais oa software */
         Iniciador iniciador = new Iniciador();
         Housekeeper hk = new Housekeeper();
+        
         iniciador.iniciar();
-      //  try {
-            hk.executar();
-            //while(true){
-            
-            //}
-                
-            //}
-        //} catch (IOException ex) {
-          //  Logger.getLogger(SWPDC.class.getName()).log(Level.SEVERE, null, ex);
-        //}
+        hk.executar();
+        iniciarTarefas();
     }
     
     /**
@@ -41,5 +34,14 @@ public class SWPDC {
     public static void iniciarTarefas(){
         GerenciadorDados gerenciadorDados = new GerenciadorDados();
         gerenciadorDados.iniciar();
+        
+        while (true){
+            
+            
+        
+        
+        
+        
+        }
     }
 }

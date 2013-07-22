@@ -6,6 +6,11 @@ package dados;
  */
 public enum TipoBufferEnum {
  
-    tbCientifico, tbDiagnose, tbHousekeeping, tbRelatoEventos, tbTemperatura, tbTeste
+    tbCientifico,
+    tbDiagnose,
+    tbHousekeeping,
+    tbRelatoEventos,
+    tbTemperatura,
+    tbTeste
 
 }

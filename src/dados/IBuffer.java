@@ -7,7 +7,7 @@ package dados;
 public interface IBuffer {
 
     //Verifica se o buffer está vazio. 1 indica que o buffer está vazio, 0, caso contrário
-    public int estaVazio();
+    public boolean estaVazio();
  
     // Insere um dado no buffer, dado - Ponteiro para endereço do primeiro byte 
     // do dado a ser inserido no buffer, tamanho - Tamanho do dado a ser inserido

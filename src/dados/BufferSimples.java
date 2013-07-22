@@ -35,12 +35,12 @@ public class BufferSimples implements IBufferSimples, IBuffer {
     }
 
     @Override
-    public int estaVazio() {
+    public boolean estaVazio() {
         if (m_ixwr == 0) {
-            return 1;
+            return true;
         }
    
-        return 0;
+        return false;
     }
    
 

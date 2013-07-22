@@ -36,7 +36,7 @@ public class BufferVirtual implements IBufferVirtual, IBuffer{
     }
 
     @Override
-    public int estaVazio() {
+    public boolean estaVazio() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
