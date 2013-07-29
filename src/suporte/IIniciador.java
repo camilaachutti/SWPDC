@@ -6,5 +6,7 @@ package suporte;
  */
 public interface IIniciador {
         
-    public int iniciar();
+    public void iniciar();
+    public int obterStatusPDC();
+    public int ativarModuloDados();
    }

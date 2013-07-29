@@ -3,8 +3,6 @@ package swpdc;
 import dados.GerenciadorDados;
 import dados.Housekeeper;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import suporte.Iniciador;
 
 /**
@@ -24,8 +22,13 @@ public class SWPDC {
         Housekeeper hk = new Housekeeper();
         
         iniciador.iniciar();
-        hk.executar();
-        iniciarTarefas();
+        iniciador.obterStatusPDC();
+        iniciador.gerarRelatoPOST ();
+        iniciador.ativarModuloDados();
+        //hk.executar();\
+        
+        
+        //iniciarTarefas();
     }
     
     /**
@@ -35,13 +38,13 @@ public class SWPDC {
         GerenciadorDados gerenciadorDados = new GerenciadorDados();
         gerenciadorDados.iniciar();
         
-        while (true){
+        //while (true){
             
             
         
         
         
         
-        }
+        //}
     }
 }
