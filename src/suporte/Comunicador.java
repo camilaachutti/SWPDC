@@ -6,6 +6,7 @@ package suporte;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -22,9 +23,12 @@ public class Comunicador {
     FileWriter arquivoInstW = null;
     BufferedWriter bufHistW = null;
     BufferedWriter bufInstW = null;
-  
+    FileReader arquivoSysInfo = null;
+    FileReader arquivoRegistroTemp = null;
     // tipoArquivo = 1 -> historico
     // tipoArquivo = 2 -> instrução
+    // tipoArquivo = 3 -> sysInfo
+    // tipoArquivo = 4 -> registroTemp
     public Comunicador ( int tipoArquivo) throws IOException{
        
       switch( tipoArquivo )
@@ -40,6 +44,19 @@ public class Comunicador {
                 arquivoInstW = new FileWriter (instrucoes, true);
                 bufInstW = new BufferedWriter (arquivoInstW);
                 break;
+        case 3: try{
+                    arquivoSysInfo = new FileReader(caminhoAbsoluto + "sysInfo.txt");
+                } catch (IOException ex) {
+                     Logger.getLogger(Comunicador.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                break;
+        case 4: try{
+                    arquivoRegistroTemp = new FileReader(caminhoAbsoluto + "registroTemp.txt");
+                } catch (IOException ex) {
+             Logger.getLogger(Comunicador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                break;
+        
         default:
                System.out.println("Tipo de arquivo escolhido não existe");
         }
@@ -55,7 +72,7 @@ public class Comunicador {
         try {
             arquivo.createNewFile();
         } catch (IOException ex) {
-            Logger.getLogger(Iniciador.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Comunicador.class.getName()).log(Level.SEVERE, null, ex);
         }
         return arquivo;
     }
