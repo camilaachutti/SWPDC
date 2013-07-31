@@ -36,7 +36,7 @@ public enum TipoRelatoEventoEnum {
     treEndIniIguFinDga,// valor de endereço inicial igual ao endereço final de descarga de dados
     treEndIniMaiFinDga,// valor de endereço inicial maior do que endereço final de descarga de dados
     //treErrCG, // erro no circuito cão de guarda
-    treErrDup, //erro duplo na memória SRAM
+    //treErrDup, //erro duplo na memória SRAM
     //treErrParModProComOBDH,
     treErrSim, //erro simples na memória SRAM
     //treErrSubAtuProComOBDH,
@@ -54,7 +54,7 @@ public enum TipoRelatoEventoEnum {
     treTtaPDCPOST, //Temperatura interna do PDC-POST
     //treTxDdoCfoHxOff,
     //treTxDdoHxIni,
-    treVrfMemPrg, //Verificcação da Memória do Programa
+    treVrfMemPrg //Verificcação da Memória do Programa
     //treVrfMemSRAM // Verificação da memória SRAM
 
 }

@@ -22,8 +22,8 @@ public class SWPDC {
         Housekeeper hk = new Housekeeper();
         
         iniciador.iniciar();
-        iniciador.obterStatusPDC();
-        iniciador.gerarRelatoPOST ();
+        iniciador.obterEstadoPDC();
+        //iniciador.gerarRelatoPOST ();
         iniciador.ativarModuloDados();
         //hk.executar();\
         

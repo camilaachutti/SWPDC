@@ -6,12 +6,13 @@ package suporte;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 /**
  *
  * @author cachutti
@@ -23,51 +24,30 @@ public class Comunicador {
     FileWriter arquivoInstW = null;
     BufferedWriter bufHistW = null;
     BufferedWriter bufInstW = null;
-    FileReader arquivoSysInfo = null;
-    FileReader arquivoRegistroTemp = null;
+   
     // tipoArquivo = 1 -> historico
-    // tipoArquivo = 2 -> instrução
-    // tipoArquivo = 3 -> sysInfo
-    // tipoArquivo = 4 -> registroTemp
-    public Comunicador ( int tipoArquivo) throws IOException{
-       
-      switch( tipoArquivo )
-        {
-        case 1:
-                File historico = criaArquivo("historico.txt");
-                arquivoHistW = new FileWriter (historico, true);
-                bufHistW = new BufferedWriter (arquivoHistW);
-                break;
+    // tipoArquivo = 2 -> instrução, sysInfo, registroTemp
+    // os dois últimos estarão lá sempre (em teoria) só precisamos ver se os dados que estão lá já são os atualizados.
+    public Comunicador (){
+        try {
+            File historico = criaArquivo("historico.txt");
+            File instrucoes = criaArquivo("instrucoes.txt" );
+            arquivoHistW = new FileWriter (historico, true);
+            bufHistW = new BufferedWriter (arquivoHistW);
 
-        case 2: 
-                File instrucoes = criaArquivo("instrucoes.txt" );
-                arquivoInstW = new FileWriter (instrucoes, true);
-                bufInstW = new BufferedWriter (arquivoInstW);
-                break;
-        case 3: try{
-                    arquivoSysInfo = new FileReader(caminhoAbsoluto + "sysInfo.txt");
-                } catch (IOException ex) {
-                     Logger.getLogger(Comunicador.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                break;
-        case 4: try{
-                    arquivoRegistroTemp = new FileReader(caminhoAbsoluto + "registroTemp.txt");
-                } catch (IOException ex) {
-             Logger.getLogger(Comunicador.class.getName()).log(Level.SEVERE, null, ex);
+            arquivoInstW = new FileWriter (instrucoes, true);
+            bufInstW = new BufferedWriter (arquivoInstW);
+        } catch (IOException ex) {
+            Logger.getLogger(Comunicador.class.getName()).log(Level.SEVERE, null, ex);
         }
-                break;
         
-        default:
-               System.out.println("Tipo de arquivo escolhido não existe");
-        }
-                    
-    }
+}
         
     private File criaArquivo (String nomeArquivo){
        
         File arquivo = new File(  caminhoAbsoluto + nomeArquivo );
         if (arquivo.exists()){
-            arquivo.delete();
+           return arquivo;
         }
         try {
             arquivo.createNewFile();
@@ -77,13 +57,15 @@ public class Comunicador {
         return arquivo;
     }
 
+    //TODO: Usar comandosEnum
     public void emitirComando (String comando){
         
          try {
             bufInstW.append(comando);
             bufInstW.newLine();
             bufInstW.flush();
-        } catch (IOException ex) {
+            guardarNoHistorico(getDataTime() + " emitiu comando: " + comando);
+             } catch (IOException ex) {
              Logger.getLogger(Comunicador.class.getName()).log(Level.SEVERE, null, ex);
         }
      }
@@ -99,7 +81,7 @@ public class Comunicador {
      
    public void guardarNoHistorico ( String relatoEvento ){
          try {
-            bufHistW.append( relatoEvento);
+            bufHistW.append(getDataTime() + " " + relatoEvento);
             bufHistW.newLine();
             bufHistW.flush();
         } catch (IOException ex) {
@@ -115,7 +97,11 @@ public class Comunicador {
         }
    }
    
-   
+   private String getDataTime() {
+        DateFormat formatoDataTime = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS"); 
+        Date date = new Date();
+        return formatoDataTime.format(date);
+    }
          
 }
             
