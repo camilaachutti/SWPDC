@@ -51,6 +51,8 @@ public class Temperatura {
    //Obtém as últimas amostras de temperaturas, formatadas em 10 bits por amostra.
    //buf - Ponteiro para um vetor de tamanho fixo de 150 bytes, para comportas as 
    // últimas amostras 160 de temperaturas, em 10 bits por amostra.
+    
+    //-1 é colocado no buffer para mostrar que aquela amostra está fora do intervalo admitido
     class ObterAmostras extends TimerTask{
        
         @Override
@@ -61,16 +63,35 @@ public class Temperatura {
             comunicador.guardarNoHistorico("Obtenção das novas amostras de temperatura");
             System.out.println(amostraAtual);
             m_buffer = verificador.obterAmostras(amostraAtual);
+            int todasAmostrasCorretas = 0;
             if (m_buffer != null) {
                 for (int i = 0; i < 12; i++){
-                       m_bufTta.inserir(m_buffer[i], (byte)10); 
+                    if (temperaturaPertenceAoIntevalo (m_buffer[i]) ) {
+                        m_bufTta.inserir(m_buffer[i], (byte)10);
+                    } else{
+                          m_bufTta.inserir((float)-1.0, (byte)10);
+                          todasAmostrasCorretas++;
+                    } 
                 }
-                comunicador.guardarNoHistorico("Correto armazenamento da amostra " + amostraAtual + " no buffer.");
+                if (todasAmostrasCorretas == 0){
+                    comunicador.guardarNoHistorico("Correto armazenamento da amostra " + amostraAtual + " no buffer.");
+                } else {
+                    System.out.println("Temperatura fora do intervalo detectada na amostra " + amostraAtual + ".");
+                    comunicador.guardarNoHistorico("Foram detectados " + todasAmostrasCorretas + " dados errados durante o armazenamento da amostra " + amostraAtual );
+                }
             }else{
-                //tratar se for null
+                comunicador.guardarNoHistorico("Aguardando amostra...");
             }
             
             amostraAtual++;
+        }
+
+        private boolean temperaturaPertenceAoIntevalo(float temperatura) {
+            if(temperatura >= 10.0 && temperatura <= 40.0) {
+                return true;
+            }
+               return false;
+        
         }
    }
 }

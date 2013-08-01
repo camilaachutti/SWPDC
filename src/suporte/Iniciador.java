@@ -45,8 +45,6 @@ public class Iniciador implements IIniciador{
     }
     
     
-    public void gerarRelatoPOST() {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
+ 
 
 }

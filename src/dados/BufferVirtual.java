@@ -41,12 +41,12 @@ public class BufferVirtual implements IBufferVirtual, IBuffer{
     }
 
     @Override
-    public byte inserir(int dado, byte tamanho) {
+    public byte inserir(float dado, byte tamanho) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public byte remover(int dado, byte tamanho) {
+    public byte remover(float dado, byte tamanho) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

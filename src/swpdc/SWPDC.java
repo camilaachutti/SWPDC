@@ -12,19 +12,20 @@ import suporte.Iniciador;
  */
 public class SWPDC {
 
-    /**
-     * @param args the command line arguments
-     */
+     private static GerenciadorDados gerenciadorDados;
+     Iniciador iniciador;
+     Housekeeper hk;
+       
     public static void main(String[] args) throws IOException {
         /* A Inicialização foi dividida em 2 fases.A primeira é a POST, que 
-         * realiza a verificação de hardware e a segunda é a que ocorre depois
+         * realiza a verificação de hardware -> excluido e a segunda é a que ocorre depois
          * e é o relacionada mais oa software */
         Iniciador iniciador = new Iniciador();
         Housekeeper hk = new Housekeeper();
         
         iniciador.iniciar();
         iniciador.obterEstadoPDC();
-        //iniciador.gerarRelatoPOST ();
+     
         //iniciador.ativarModuloDados();
         //hk.executar();\
         
@@ -38,7 +39,8 @@ public class SWPDC {
      * Iniciação das tarefas de regime permanente (classes ativas).
      */
     public static void iniciarTarefas(){
-        GerenciadorDados gerenciadorDados = new GerenciadorDados();
+       
+        gerenciadorDados = GerenciadorDados.instanciar();
         gerenciadorDados.iniciar();
         
         //while (true){

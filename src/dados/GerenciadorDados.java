@@ -1,5 +1,6 @@
 package dados;
 import java.util.GregorianCalendar;
+import suporte.Comunicador;
 
 /**
  *
@@ -8,28 +9,38 @@ import java.util.GregorianCalendar;
 
 //Coordena a manipulação de dados dos buffers: científico, diagnóstico,
 //housekeeping, carga de dados, descarga de dados e relato de eventos.
+//singleton
 public class GerenciadorDados implements IGerenciadorDados {
 
-      private BufferVirtual m_bufCco; //Buffer virtual para dados científicos.
-      private BufferVirtual m_bufCga; //Buffer virtual para carga de dados/programas.
-      private BufferVirtual m_bufDge; //Buffer virtual para dados de diagnóstico.
-      private BufferVirtual m_bufDmp; // Buffer virtual para descarga de dados - dump.
-      private BufferSimples m_bufEvt; //Buffer simples (memória não paginada) para relato de eventos.
-      private BufferVirtual m_bufHke; //Buffer virtual para dados de housekeeping.
-      private BufferVirtual m_bufTstHX1; //Buffer virtual para ados de teste da EPP HX1.
-      private BufferVirtual m_bufTstHX2; //Buffer virtual para dados de teste da EPP HX2.
-      private MemoriaVirtual m_memCco; //Região de memória virtual para dados científicos.
-      private MemoriaVirtual m_memCga; //Região de memória virtual para carga de dados/programa.
-      private MemoriaVirtual m_memDge; //Região de memória virtual para dados de diagnóstico.
-      private MemoriaVirtual m_memDmp; //Região de memória virtual para descarga de dados - dump.
-      private MemoriaVirtual m_memHke; //Região de memória virtual para dados de housekeeping.
-      private MemoriaVirtual m_memRelEvt; //Área de memória para os relatos de eventos.
-      private MemoriaVirtual m_memTstHX1; //Região de memória virtual para dados de teste da EPP HX1.
-      private MemoriaVirtual m_memTstHX2; //Região de memória virtual para dados de teste da EPP HX2.
+      //private BufferVirtual m_bufCco; //Buffer virtual para dados científicos.
+      //private BufferVirtual m_bufCga; //Buffer virtual para carga de dados/programas.
+      //private BufferVirtual m_bufDge; //Buffer virtual para dados de diagnóstico.
+      //private BufferVirtual m_bufDmp; // Buffer virtual para descarga de dados - dump.
+        private BufferSimples m_bufCco; //Buffer simples para armazenamento de temperaturas.
+        private BufferSimples m_bufEvt; //Buffer simples (memória não paginada) para relato de eventos.
+      //private BufferVirtual m_bufHke; //Buffer virtual para dados de housekeeping.
+      //private BufferVirtual m_bufTstHX1; //Buffer virtual para ados de teste da EPP HX1.
+      //private BufferVirtual m_bufTstHX2; //Buffer virtual para dados de teste da EPP HX2.
+      //private MemoriaVirtual m_memCco; //Região de memória virtual para dados científicos.
+      //private MemoriaVirtual m_memCga; //Região de memória virtual para carga de dados/programa.
+      //private MemoriaVirtual m_memDge; //Região de memória virtual para dados de diagnóstico.
+      //private MemoriaVirtual m_memDmp; //Região de memória virtual para descarga de dados - dump.
+      //private MemoriaVirtual m_memHke; //Região de memória virtual para dados de housekeeping.
+      //private MemoriaVirtual m_memRelEvt; //Área de memória para os relatos de eventos.
+      //private MemoriaVirtual m_memTstHX1; //Região de memória virtual para dados de teste da EPP HX1.
+      //private MemoriaVirtual m_memTstHX2; //Região de memória virtual para dados de teste da EPP HX2.
+      private static GerenciadorDados instancia = null;
     
+     private GerenciadorDados (){
+         
+     }
     
-    
-    
+     public static GerenciadorDados instanciar(){
+        if (instancia == null) {
+            instancia = new GerenciadorDados();
+        }
+      return instancia;
+    }
 
     @Override
     public void altBufDmp(double endInicial, double endFinal) {
@@ -142,6 +153,7 @@ int horaInt = Integer.parseInt(hora);
 
  return horaInt;
     }
+
 @Override
     public double remover(TipoBufferEnum local, int dado, byte tamanho) {
        byte tamanho_evento_removido; 
