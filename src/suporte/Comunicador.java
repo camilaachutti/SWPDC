@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package suporte;
 
 import java.io.BufferedWriter;
@@ -17,6 +13,7 @@ import java.util.logging.Logger;
  *
  * @author cachutti
  */
+//singleton
 public class Comunicador {
    
     String caminhoAbsoluto = "/Users/cachutti/Desktop/IC/teste/";
@@ -24,11 +21,11 @@ public class Comunicador {
     FileWriter arquivoInstW = null;
     BufferedWriter bufHistW = null;
     BufferedWriter bufInstW = null;
-   
+    private static Comunicador instancia = null;
     // tipoArquivo = 1 -> historico
     // tipoArquivo = 2 -> instrução, sysInfo, registroTemp
     // os dois últimos estarão lá sempre (em teoria) só precisamos ver se os dados que estão lá já são os atualizados.
-    public Comunicador (){
+    private Comunicador (){
         try {
             File historico = criaArquivo("historico.txt");
             File instrucoes = criaArquivo("instrucoes.txt" );
@@ -43,11 +40,18 @@ public class Comunicador {
         
 }
         
+    public static Comunicador instanciar(){
+        if (instancia == null) {
+            instancia = new Comunicador();
+        }
+      return instancia;
+    }
+    
     private File criaArquivo (String nomeArquivo){
        
         File arquivo = new File(  caminhoAbsoluto + nomeArquivo );
         if (arquivo.exists()){
-           return arquivo;
+           arquivo.delete();
         }
         try {
             arquivo.createNewFile();
@@ -57,6 +61,7 @@ public class Comunicador {
         return arquivo;
     }
 
+    
     //TODO: Usar comandosEnum
     public void emitirComando (String comando){
         

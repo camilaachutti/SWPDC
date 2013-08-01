@@ -6,12 +6,13 @@ import java.util.NoSuchElementException;
  *
  * @author cachutti
  */
+//buffer circular
 public class BufferSimples implements IBufferSimples, IBuffer {
 
     
     private Object m_area; //"Ponteiro" para a área de dados alocada para este buffer.
-    private int m_ixrd; //Indexador de leitura do buffer.
-    private int m_ixwr; //Indexador de escrita do buffer.
+    private int m_ixrd; //Indexador de leitura do buffer. head
+    private int m_ixwr; //Indexador de escrita do buffer. tail
     private byte m_tamanho; //Tamanho, em bytes, da área de dados alocada
     ByteBuffer buffer;
     
@@ -45,7 +46,7 @@ public class BufferSimples implements IBufferSimples, IBuffer {
    
 
     @Override
-    public byte inserir(int dado, byte tamanho){            
+    public byte inserir(float dado, byte tamanho){            
       
         byte capacidadeInicial;
         byte capacidadeFinal;
@@ -55,8 +56,8 @@ public class BufferSimples implements IBufferSimples, IBuffer {
             System.out.println("Erro: Estouro do buffer");
         }
           
-         capacidadeInicial = (byte) buffer.remaining();
-        buffer = buffer.put(dado, tamanho);   
+        capacidadeInicial = (byte) buffer.remaining();
+        buffer = buffer.putFloat(tamanho, dado);   
         capacidadeFinal = (byte) buffer.remaining();
       
         bytesInseridos = (byte)(capacidadeFinal - capacidadeInicial);
@@ -68,7 +69,7 @@ public class BufferSimples implements IBufferSimples, IBuffer {
     }
 
     @Override
-    public byte remover(int dado, byte tamanho) {  
+    public byte remover(float dado, byte tamanho) {  
            
         if (m_ixwr == 0) {  
                 throw new NoSuchElementException();  
@@ -77,10 +78,10 @@ public class BufferSimples implements IBufferSimples, IBuffer {
         byte capacidadeInicial;
         byte capacidadeFinal;
         byte bytesRemovidos;
-        int dadoRemovido;
+        float dadoRemovido;
          
         capacidadeInicial = (byte) buffer.remaining();
-        dadoRemovido = buffer.getInt(dado);
+        dadoRemovido = buffer.getFloat();
         capacidadeFinal = (byte) buffer.remaining();
         bytesRemovidos = (byte)(capacidadeFinal - capacidadeInicial);
       

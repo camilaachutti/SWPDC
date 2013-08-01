@@ -2,6 +2,7 @@ package swpdc;
 
 import dados.GerenciadorDados;
 import dados.Housekeeper;
+import dados.Temperatura;
 import java.io.IOException;
 import suporte.Iniciador;
 
@@ -24,10 +25,12 @@ public class SWPDC {
         iniciador.iniciar();
         iniciador.obterEstadoPDC();
         //iniciador.gerarRelatoPOST ();
-        iniciador.ativarModuloDados();
+        //iniciador.ativarModuloDados();
         //hk.executar();\
         
-        
+        Temperatura temp = new Temperatura();
+        temp.executar(10);
+       
         //iniciarTarefas();
     }
     

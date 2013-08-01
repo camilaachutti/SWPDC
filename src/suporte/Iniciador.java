@@ -15,12 +15,11 @@ public class Iniciador implements IIniciador{
   
     @Override
     public void iniciar() {
-        verificador = new Verificador();
-        comunicador = new Comunicador();
+        verificador = Verificador.instanciar();
+        comunicador = Comunicador.instanciar();
         comunicador.emitirComando("COMEÇAR SIMULAÇAO");
         
         while (!verificador.verificaStatusAlimentacaoLigado()){
-            System.out.println("oiiiiiii dentro");
             comunicador.guardarNoHistorico("Aguardando PDC ligar.");
         }
         comunicador.guardarNoHistorico("PDC inicializado com sucesso.");

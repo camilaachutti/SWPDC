@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package suporte;
 
 import java.io.BufferedWriter;
@@ -19,12 +15,20 @@ public class Logger {
     String caminhoAbsoluto = "/Users/cachutti/Desktop/IC/teste/";
     FileWriter arquivoLog = null;
     BufferedWriter bufLog = null;
-    
-    public Logger () throws IOException{
+    private static Logger instancia = null;
+    //singleton
+    private Logger () throws IOException{
     
         File log = criaArquivo("log.txt");
         arquivoLog = new FileWriter (log, true);
         bufLog = new BufferedWriter (arquivoLog);
+    }
+    
+    public static Logger instanciar() throws IOException{
+        if (instancia == null) {
+            instancia = new Logger();
+        }
+      return instancia;
     }
     
     private File criaArquivo (String nomeArquivo){
