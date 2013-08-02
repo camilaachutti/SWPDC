@@ -11,15 +11,13 @@ import java.util.logging.Logger;
  *
  * @author cachutti
  */
-//singleton
+
 public class Verificador {
-    FileReader arquivoSysInfo = null;
-    FileReader arquivoRegistroTemp = null;
+    FileReader arquivoSysInfo = null, arquivoRegistroTemp = null;
+    BufferedReader bufReaderSysInfo = null, bufReaderRegistroTemp = null;
     String caminhoAbsoluto = "/Users/cachutti/Desktop/IC/teste/";
-    BufferedReader bufReaderSysInfo = null;
-    BufferedReader bufReaderRegistroTemp = null;
-    private static Verificador instancia = null;
     Comunicador comunicador; 
+    private static Verificador instancia = null;
            
     private Verificador (){
         try {
@@ -33,34 +31,37 @@ public class Verificador {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Verificador.class.getName()).log(Level.SEVERE, null, ex);
         }
-   }
+    }
     
-   public static Verificador instanciar(){
+    public static Verificador instanciar(){
         if (instancia == null) {
             instancia = new Verificador();
         }
       return instancia;
     }
-    //quando liga
+    
     public boolean verificaStatusAlimentacaoLigado (){
-        try {
-            String linha = bufReaderSysInfo.readLine();
+        String linha;
+        
+        try {    
+            linha = bufReaderSysInfo.readLine();
             
             if (!linha.equals("[status] ligado")) {
                 System.out.println("Aguardando PDC ligar...");
                 return false;    
             }
-          
         } catch (IOException ex) {
             Logger.getLogger(Verificador.class.getName()).log(Level.SEVERE, null, ex);
         }
         return true;
-}
+    }
     
     public String verificaEstado (){
-        try {
-            String linha = bufReaderSysInfo.readLine();
-            String linhaAnterior = null;
+            String linhaAnterior = null, linha;
+        
+            try {
+            linha = bufReaderSysInfo.readLine();
+        
             while (linha !=null){ 
                 if (!linha.contains("[modoOp]") && linha != null) {
                     linha = bufReaderSysInfo.readLine();
@@ -74,47 +75,48 @@ public class Verificador {
             Logger.getLogger(Verificador.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
-   }
-    // olhar para qdo o munAmostras atual tem 2 digitos
-   public float[] obterAmostras (int numAmostraAtual){
-      
-     
-      float[] amostras = null;
-      try {
+    }
+    // TODO: caso onde munAmostrasAtual tem 2 dígitos
+    public float[] obterAmostras (int numAmostraAtual){
+        float[] amostras = null;
+
+        try {
             amostras = new float[13];
             String linha = bufReaderRegistroTemp.readLine();
 
             System.out.println(linha);
-          
-           if (linha == null || (linha.contains("[numAm]") && !EhAmostraAtual(numAmostraAtual, linha)) ) {
-                System.out.println("Arquivo de registro de amostras desatualizado!");
-                comunicador.guardarNoHistorico("Arquivo de amostras desatualizado");
-                return null;
-                } 
-            
+
+            if (linha == null || (linha.contains("[numAm]") && !EhAmostraAtual(numAmostraAtual, linha)) ) {
+                 System.out.println("Arquivo de registro de amostras desatualizado!");
+                 comunicador.guardarNoHistorico("Arquivo de amostras desatualizado");
+                 return null;
+            } 
+
             if (!linha.contains("[numAm]") && linha != null) {
-                System.out.println("Arquivo de registro de amostras errado!");
-                comunicador.guardarNoHistorico("Problema no arquivo de amostras");
-                return null;
+                 System.out.println("Arquivo de registro de amostras errado!");
+                 comunicador.guardarNoHistorico("Problema no arquivo de amostras");
+                 return null;
             }
-                
+
             if (linha.contains("[numAm]") && EhAmostraAtual(numAmostraAtual, linha) ) {
-                System.out.println("LinhaAnterior" + linha);
-                amostras = organizarAmostrar (linha);   
+                 System.out.println("LinhaAnterior" + linha);
+                 amostras = organizarAmostrar (linha);   
             }
         } catch (IOException ex) {
             Logger.getLogger(Verificador.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
-       System.out.println("Amostras obtidas com sucesso");
-       comunicador.guardarNoHistorico("Amostras obtidas com sucesso");
-       return amostras;
-       
-   }
+
+        System.out.println("Amostras obtidas com sucesso");
+        comunicador.guardarNoHistorico("Amostras obtidas com sucesso");
+        
+        return amostras;
+    }
 
     private float[] organizarAmostrar(String amostras) {
-            String valores = null;
-            float[] temperaturas = new float[12];
+            float[] temperaturas;
+            String valores;
+            
+            temperaturas = new float[12];
             valores = amostras.substring(18);
           
             for(int i = 0, j = 0; i < 12; i++, j +=6){
@@ -123,18 +125,18 @@ public class Verificador {
             }
             
             return temperaturas;
-    
-    }
+        }
 
     private boolean EhAmostraAtual(int numAmostraAtual, String linha) {
         float numAmostra;
         
         numAmostra = Float.parseFloat(linha.substring(8, 9));
+        
         if (numAmostra == numAmostraAtual){
             return true;
         } else{
             return false;
-        }
-           
+        }           
     }
+
 }

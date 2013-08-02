@@ -11,12 +11,11 @@ import java.util.logging.Level;
  * @author cachutti
  */
 public class Logger {
-     // criaArquivo ("log.txt");
     String caminhoAbsoluto = "/Users/cachutti/Desktop/IC/teste/";
     FileWriter arquivoLog = null;
     BufferedWriter bufLog = null;
     private static Logger instancia = null;
-    //singleton
+    
     private Logger () throws IOException{
     
         File log = criaArquivo("log.txt");

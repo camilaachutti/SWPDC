@@ -13,6 +13,7 @@ import suporte.Iniciador;
 public class SWPDC {
 
      private static GerenciadorDados gerenciadorDados;
+     private static int estadoPDC;
      Iniciador iniciador;
      Housekeeper hk;
        
@@ -24,9 +25,13 @@ public class SWPDC {
         Housekeeper hk = new Housekeeper();
         
         iniciador.iniciar();
-        iniciador.obterEstadoPDC();
-     
-        //iniciador.ativarModuloDados();
+        if (iniciador.m_relPOST == 1){
+           estadoPDC = iniciador.obterEstadoPDC();
+        }
+        
+        if (estadoPDC == 1){
+            iniciador.ativarModuloDados();
+        }
         //hk.executar();\
         
         Temperatura temp = new Temperatura();

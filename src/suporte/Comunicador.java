@@ -9,11 +9,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 /**
  *
  * @author cachutti
  */
-//singleton
+
 public class Comunicador {
    
     String caminhoAbsoluto = "/Users/cachutti/Desktop/IC/teste/";
@@ -21,7 +22,7 @@ public class Comunicador {
     FileWriter arquivoInstW = null;
     BufferedWriter bufHistW = null;
     BufferedWriter bufInstW = null;
-    private static Comunicador instancia = null;
+    private static Comunicador instancia;
     // tipoArquivo = 1 -> historico
     // tipoArquivo = 2 -> instrução, sysInfo, registroTemp
     // os dois últimos estarão lá sempre (em teoria) só precisamos ver se os dados que estão lá já são os atualizados.
