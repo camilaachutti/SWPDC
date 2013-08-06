@@ -57,20 +57,23 @@ public class Verificador {
     }
     
     public String verificaEstado (){
-            String linhaAnterior = null, linha;
+            String linha;
         
             try {
             linha = bufReaderSysInfo.readLine();
         
-            while (linha !=null){ 
-                if (!linha.contains("[modoOp]") && linha != null) {
-                    linha = bufReaderSysInfo.readLine();
+            //while (linha !=null){ 
+                if (!linha.contains("[modoOp]") || linha == null) {
+                    //linha = bufReaderSysInfo.readLine();
+                    comunicador.guardarNoHistorico("Problema com o o arquivo de sistema do PDC");
+                    return null;
                 } else {
-                    linhaAnterior = linha;
-                    linha = bufReaderSysInfo.readLine();
+                    return linha.substring(9);
+                    //linhaAnterior = linha;
+                    //linha = bufReaderSysInfo.readLine();
                 }
-            }
-            return linhaAnterior.substring(9);
+            //}
+            
         } catch (IOException ex) {
             Logger.getLogger(Verificador.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -137,6 +140,24 @@ public class Verificador {
         } else{
             return false;
         }           
+    }
+    
+    public int obterRelogio (){
+        int relogio = 0;
+        String linha;
+        try {
+            linha = bufReaderSysInfo.readLine();
+            
+              if (!linha.contains("[relogio]") || linha == null){
+                    comunicador.guardarNoHistorico("Problema com o o arquivo de sistema do PDC - relógio não foi atualizado");
+               } else {
+                    relogio = Integer.parseInt(linha.substring(10));
+              }
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Verificador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return relogio;
     }
 
 }

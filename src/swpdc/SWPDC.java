@@ -1,10 +1,15 @@
 package swpdc; 
 
+import com.sun.tools.apt.comp.PrintAP;
 import dados.GerenciadorDados;
 import dados.Housekeeper;
 import dados.Temperatura;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import suporte.Iniciador;
+import suporte.Relogio;
 
 /**
  *
@@ -16,7 +21,8 @@ public class SWPDC {
      private static int estadoPDC;
      Iniciador iniciador;
      Housekeeper hk;
-       
+     static Relogio relogio; 
+     static Temperatura temperatura;
     public static void main(String[] args) throws IOException {
         /* A Inicialização foi dividida em 2 fases.A primeira é a POST, que 
          * realiza a verificação de hardware -> excluido e a segunda é a que ocorre depois
@@ -34,9 +40,12 @@ public class SWPDC {
         }
         //hk.executar();\
         
-        Temperatura temp = new Temperatura();
-        temp.executar(10);
+        temperatura = new Temperatura();
+        temperatura.executar(10);
        
+        relogio = new Relogio();
+        relogio.executar(60);
+        
         //iniciarTarefas();
     }
     
