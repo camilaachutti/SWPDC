@@ -1,7 +1,10 @@
 package dados;
 
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import suporte.Comunicador;
 import suporte.Verificador;
 
@@ -20,57 +23,73 @@ public class Temperatura {
     Comunicador comunicador;
     Verificador verificador;
     int amostraAtual = 1;
+    Housekeeper hk = new Housekeeper();
+        
     //Ponto de entrada da tarefa.
     
-    public void executar(int seconds){
-        //int canal = 1; // os canais possíveis são 1 e 2
+    public Temperatura (){
         m_buffer = new float[12];
-        m_bufTta = new BufferSimples(this, (byte)10000);
+        m_bufTta = new BufferSimples(this , (byte)60000);
         comunicador = Comunicador.instanciar();
         verificador = Verificador.instanciar();
         timer = new Timer();
+        
+    }
+    
+    public void executar(int seconds){
         timer.scheduleAtFixedRate (new ObterAmostras(), 500 ,seconds*1000);
         
     }
 
-    //Inicia canal ADC.
-    //canal - Canal ADC usado para ler a temperatura (ponto para amostrar
-    //digitalmente a tensão aplicada no canal).
-    //private void iniciarCanal(int canal){
-        
-    //}
-    
-   //Lê a temperatura. 
-   //canal - Canal ADC usado para ler a temperatura (ponto para amostrar
-   //digitalmente a tensão aplicada no canal).
-   //retorno - Valor digital correspondente a tensão lida do conversor AD no canal especificado.
-   //private int lerTemperatura(int canal){
-     //  return 1;
-   //}
-   
-   //Obtém as últimas amostras de temperaturas, formatadas em 10 bits por amostra.
-   //buf - Ponteiro para um vetor de tamanho fixo de 150 bytes, para comportas as 
-   // últimas amostras 160 de temperaturas, em 10 bits por amostra.
-    
+   //Obtém as últimas amostras de temperatura.
     //-1 é colocado no buffer para mostrar que aquela amostra está fora do intervalo admitido
     class ObterAmostras extends TimerTask{
        
         @Override
         public void run (){
-           
+            m_bufTta.clear();
+            obterERelatarTemperatura();    
+        }
+
+        public boolean temperaturaPertenceAoIntevalo(float temperatura) {
+            if(temperatura >= 10.0 && temperatura <= 40.0) {
+                return true;   
+            }
+            else{
+               System.out.println("temperatura " + temperatura + " fora do intervalo.");
+               return false;
+              }
+        }
+   
+        private void obterERelatarTemperatura (){
+            
             comunicador.emitirComando("OBTER TEMPERATURA");
+            
+            try {
+                Thread.sleep((long)5000); //5 segundo
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Temperatura.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             System.out.println("Novas amostras de temperatura");
             comunicador.guardarNoHistorico("Obtenção das novas amostras de temperatura");
-            System.out.println(amostraAtual);
             m_buffer = verificador.obterAmostras(amostraAtual);
             int todasAmostrasCorretas = 0;
+            
             if (m_buffer != null) {
                 for (int i = 0; i < 12; i++){
+                     System.out.println(m_buffer[i]);
                     if (temperaturaPertenceAoIntevalo (m_buffer[i]) ) {
-                        m_bufTta.inserir(m_buffer[i], (byte)10);
+                        System.out.println("Pertenço ao intervalo");
+                        m_bufTta.inserir(m_buffer[i], (byte)4, i);
+                        //System.out.println(m_bufTta.recuperar(i));
+                      
                     } else{
-                          m_bufTta.inserir((float)-1.0, (byte)10);
-                          todasAmostrasCorretas++;
+                        System.out.println("Não Pertenço ao intervalo");
+                        m_bufTta.inserir(-1, (byte)4, i);
+                        System.out.println(m_bufTta.recuperar(i));
+                      
+                        todasAmostrasCorretas++;
                     } 
                 }
                 if (todasAmostrasCorretas == 0){
@@ -81,17 +100,16 @@ public class Temperatura {
                 }
             }else{
                 comunicador.guardarNoHistorico("Aguardando amostra...");
+                System.out.println("oiiiiiiii");
             }
             
+            
+            try {
+                hk.executar(m_bufTta);
+            } catch (IOException ex) {
+                Logger.getLogger(Temperatura.class.getName()).log(Level.SEVERE, null, ex);
+            }
             amostraAtual++;
         }
-
-        private boolean temperaturaPertenceAoIntevalo(float temperatura) {
-            if(temperatura >= 10.0 && temperatura <= 40.0) {
-                return true;
-            }
-               return false;
-        
-        }
-   }
+    }
 }

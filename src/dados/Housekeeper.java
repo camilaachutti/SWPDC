@@ -19,25 +19,30 @@ import suporte.Iniciador;
 public class Housekeeper {
     
     //Memória de trabalho para composição do pacote de housekeeping.
-    private PacoteHK m_pacHke = new PacoteHK();
-    String caminhoAbsolutoRelatorio = "/Users/cachutti/Desktop/IC/teste/relatorio.txt";
-    
+    private PacoteHK m_pacHke;
+    String caminhoAbsolutoRelatorio = System.getProperty("user.dir") + "/src/arquivos/";
+    int i = 0;
     //Ponto de entrada da tarefa.
     
-    public void executar() throws IOException{
-            
+    public void executar(BufferSimples buffer) throws IOException{
+        
         prepararPacoteHK();
+        //buffer.clear();
+        prepararTemperaturas(buffer);
         formatarRelatorio();
         }
     
-
     //Executa a preparação do pacote de housekeeping, acessando as origens de 
     //dados para um housekeeping completo, gravando os dados no pacote de 
     //housekeeping interno (m_pacHke).
-    
-    
     private void prepararPacoteHK(){
+        String modOpe = "Nominal"; //Modo de operação corrente do SWPDC.
+        String tpoAmoTta = "0"; //Tempo de amostragem de temperaturas.
+        int qteErrSim = 0; //Quantidade de erros simples ocorridos desde o último zeramento.
+        TipoRelatoEventoEnum relEvt = TipoRelatoEventoEnum.treBufDdoCco10; //Últimos relatos de eventos ocorridos.
         
+        m_pacHke = new PacoteHK( modOpe, qteErrSim, relEvt, tpoAmoTta);
+        i++;
         m_pacHke.amoTta [0] = 0;
         m_pacHke.amoTta [1] = 1;
         m_pacHke.amoTta [2] = 2;
@@ -50,24 +55,13 @@ public class Housekeeper {
         m_pacHke.amoTta [9] = 9;
         m_pacHke.amoTta [10] = 10;
         m_pacHke.amoTta [11] = 11;
- //Últimas 12 amostras de temperaturas
-        m_pacHke.modOpe = "Nominal"; //Modo de operação corrente do SWPDC.
-        m_pacHke.tpoAmoTta = 0; //Tempo de amostragem de temperaturas.
-        m_pacHke.qteErrSim = 0; //Quantidade de erros simples ocorridos desde o último zeramento.
-        m_pacHke.relEvt = TipoRelatoEventoEnum.treBufDdoCco10; //Últimos relatos de eventos ocorridos.
-        // m_pacHke.ptrCga = 0; //Ponteiro de carga de programas.
-       // m_pacHke.qteErrCG = 0; //Quantidade de erros de cão-de-guarda ocorridos desde o último zeramento.
-       // m_pacHke.qteErrDup = 0; //Quantidade de erros duplos ocorridos desde o último zeramento.
-       //m_pacHke.staAlmEHX1 = 0; //Status da alimentação do conjunto EPP-HX1.
-       //m_pacHke.staAlmEHX2 = 0; //Status da alimentação do conjunto EPP-HX2.
-       // m_pacHke.tamanho = 0; //Tamanho dos dados de housekeeping.
-       // m_pacHke.tpoHke = 0; //Tempo de housekeeping em segundos.
+        
     }
     
     private void formatarRelatorio () throws IOException{
         try{  
            
-            File arquivo = new File( caminhoAbsolutoRelatorio );
+            File arquivo = new File( caminhoAbsolutoRelatorio + "relatorioHK" + i + ".txt" );
             arquivo.createNewFile();
             FileWriter arquivoW = new FileWriter (arquivo); 
             PrintWriter printW = new PrintWriter (arquivoW);  
@@ -75,7 +69,7 @@ public class Housekeeper {
             printW.println();
             printW.println("[data] " + getData() + "      [hora] " + getTime());
             printW.println("[modoOpSWPDC] " + m_pacHke.modOpe);
-            printW.println();
+            printW.println(); 
             printW.println("Amostras de temperaturas");
             printW.println(m_pacHke.amoTta[0]);
             printW.println(m_pacHke.amoTta[1]);
@@ -90,7 +84,8 @@ public class Housekeeper {
             printW.println(m_pacHke.amoTta[10]);
             printW.println(m_pacHke.amoTta[11]);
             printW.println(m_pacHke.qteErrSim + " Erros");
-            printW.println("Tempo de amostragem: " + m_pacHke.tpoAmoTta );
+            m_pacHke.tpoAmoTta = getTime();
+            printW.println("Intervalo de amostragem: 10s"   );
             printW.println();
             printW.println("Historico eventos");
             printW.println(m_pacHke.relEvt);
@@ -108,8 +103,20 @@ public class Housekeeper {
     }
 
     private String getTime() {
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss.SS");
         Date date = new Date();
         return dateFormat.format(date);
     }
+
+    private void prepararTemperaturas(BufferSimples buffer) {
+       for (int j = 0; j < 12; j++) {
+           if (buffer.recuperar(j) == -1.0){
+                System.out.println ("FORA DO INTERVALO CERTO");
+                m_pacHke.amoTta[j] = (float)-1.0;
+                m_pacHke.qteErrSim++;
+            }
+            m_pacHke.amoTta[j] = (float)buffer.recuperar(j);
+      }
+    
+   }
 }

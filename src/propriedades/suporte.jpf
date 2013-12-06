@@ -1,0 +1,6 @@
+target = swpdc.MainParaVerificacaoSuporte
+cg.enumerate_random = true
+
+listener = propriedades.IniciarCorrectlyProperty
+listener = propriedades.InstanciarComunicadorCorrectlyProperty
+listener = propriedades.InstanciarVerificadorCorrectlyProperty

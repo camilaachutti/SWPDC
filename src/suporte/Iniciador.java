@@ -12,11 +12,17 @@ public class Iniciador implements IIniciador{
    Comunicador comunicador; 
    Verificador verificador;
   
+   public Iniciador (){
+      this(Comunicador.instanciar(), Verificador.instanciar());
+   }
+  
+   protected Iniciador(Comunicador comunicador, Verificador verificador) {
+        this.comunicador = comunicador;
+        this.verificador = verificador;
+   }
+   
     @Override
     public void iniciar() {
-       
-        verificador = Verificador.instanciar();
-        comunicador = Comunicador.instanciar();
         
         comunicador.emitirComando("COMEÇAR SIMULAÇAO");
         
@@ -37,18 +43,21 @@ public class Iniciador implements IIniciador{
         estado = verificador.verificaEstado();
         comunicador.guardarNoHistorico("Verificação de estado do PDC realizada com sucesso - status: " + estado );
         
-        System.out.println("Estado PDC_Simulador: " + estado);
-        
         if(estado.equals("nominal")) {
+            comunicador.guardarNoHistorico("PDC está no estado NOMINAL. Inicialização bem sucedida"); 
             return 1;
         }
+        comunicador.guardarNoHistorico("PDC NÃO está no estado NOMINAL.");
         return 0;
     }
 
+    public void finalizar(){
+        comunicador.fecharHistorico();
+        comunicador.fimDaEmissaoDeComandos();        
+    }
+    
     @Override
-    public int ativarModuloDados() {
-        //iniciar gerenciamento de dados
-        
+    public int ativarModuloDados() {   
         return 1;
     }
     

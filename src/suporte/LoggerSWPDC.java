@@ -10,22 +10,22 @@ import java.util.logging.Level;
  *
  * @author cachutti
  */
-public class Logger {
-    String caminhoAbsoluto = "/Users/cachutti/Desktop/IC/teste/";
+public class LoggerSWPDC {
+    String caminhoAbsoluto = System.getProperty("user.dir") + "/src/arquivos/";
     FileWriter arquivoLog = null;
     BufferedWriter bufLog = null;
-    private static Logger instancia = null;
+    private static LoggerSWPDC instancia = null;
     
-    private Logger () throws IOException{
+    protected LoggerSWPDC () throws IOException{
     
         File log = criaArquivo("log.txt");
         arquivoLog = new FileWriter (log, true);
         bufLog = new BufferedWriter (arquivoLog);
     }
     
-    public static Logger instanciar() throws IOException{
+    public static LoggerSWPDC instanciar() throws IOException{
         if (instancia == null) {
-            instancia = new Logger();
+            instancia = new LoggerSWPDC();
         }
       return instancia;
     }

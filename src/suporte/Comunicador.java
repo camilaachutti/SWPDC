@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 /**
  *
  * @author cachutti
@@ -17,16 +18,15 @@ import java.util.logging.Logger;
 
 public class Comunicador {
    
-    String caminhoAbsoluto = "/Users/cachutti/Desktop/IC/teste/";
+    String caminhoAbsoluto = System.getProperty("user.dir") + "/src/arquivos/";
     FileWriter arquivoHistW = null;
     FileWriter arquivoInstW = null;
     BufferedWriter bufHistW = null;
     BufferedWriter bufInstW = null;
+    LoggerSWPDC log;
     private static Comunicador instancia;
-    // tipoArquivo = 1 -> historico
-    // tipoArquivo = 2 -> instrução, sysInfo, registroTemp
-    // os dois últimos estarão lá sempre (em teoria) só precisamos ver se os dados que estão lá já são os atualizados.
-    private Comunicador (){
+   
+    protected Comunicador (){
         try {
             File historico = criaArquivo("historico.txt");
             File instrucoes = criaArquivo("instrucoes.txt" );
@@ -36,16 +36,23 @@ public class Comunicador {
             arquivoInstW = new FileWriter (instrucoes, true);
             bufInstW = new BufferedWriter (arquivoInstW);
         } catch (IOException ex) {
+            log.registrarErro(getDataTime() + "Erro na inicialização do Comunicador.");
             Logger.getLogger(Comunicador.class.getName()).log(Level.SEVERE, null, ex);
-        }
+         }
         
 }
-        
+    
     public static Comunicador instanciar(){
         if (instancia == null) {
             instancia = new Comunicador();
         }
       return instancia;
+    }
+
+    protected Comunicador(BufferedWriter instrucao, BufferedWriter historico) {
+        this.bufInstW = instrucao;
+        this.bufHistW = historico;
+        
     }
     
     private File criaArquivo (String nomeArquivo){
@@ -57,13 +64,12 @@ public class Comunicador {
         try {
             arquivo.createNewFile();
         } catch (IOException ex) {
+            log.registrarErro(getDataTime() + "Erro na criação do arquivo de historico e instrucao");
             Logger.getLogger(Comunicador.class.getName()).log(Level.SEVERE, null, ex);
         }
         return arquivo;
     }
 
-    
-    //TODO: Usar comandosEnum
     public void emitirComando (String comando){
         
          try {
@@ -71,16 +77,18 @@ public class Comunicador {
             bufInstW.newLine();
             bufInstW.flush();
             guardarNoHistorico(getDataTime() + " emitiu comando: " + comando);
-             } catch (IOException ex) {
-             Logger.getLogger(Comunicador.class.getName()).log(Level.SEVERE, null, ex);
+         } catch (IOException ex) {
+            log.registrarErro(getDataTime() + "Erro na emissão de comando.");
+            Logger.getLogger(Comunicador.class.getName()).log(Level.SEVERE, null, ex);
         }
      }
        
-     public void fimDaEmissaoDeComandos (){
+   public void fimDaEmissaoDeComandos (){
        
          try {
             bufInstW.close();
         } catch (IOException ex) {
+            log.registrarErro(getDataTime() + "Erro na finalizacao da emissao de comandos.");
             Logger.getLogger(Comunicador.class.getName()).log(Level.SEVERE, null, ex);
         }
      }
@@ -91,6 +99,7 @@ public class Comunicador {
             bufHistW.newLine();
             bufHistW.flush();
         } catch (IOException ex) {
+            log.registrarErro(getDataTime() + "Erro ao guardar no historico.");
             Logger.getLogger(Comunicador.class.getName()).log(Level.SEVERE, null, ex);
         }
    }
@@ -99,11 +108,12 @@ public class Comunicador {
         try {
             bufHistW.close();
         } catch (IOException ex) {
+            log.registrarErro(getDataTime() + "Erro no fechamento de arquivo de historico.");
             Logger.getLogger(Comunicador.class.getName()).log(Level.SEVERE, null, ex);
         }
    }
    
-   private String getDataTime() {
+   protected String getDataTime() {
         DateFormat formatoDataTime = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS"); 
         Date date = new Date();
         return formatoDataTime.format(date);

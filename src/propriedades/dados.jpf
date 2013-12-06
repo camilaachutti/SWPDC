@@ -1,0 +1,7 @@
+target = swpdc.MainParaVerificacaoDados
+cg.enumerate_random = true
+
+listener = propriedades.AllocatedCorrectlyProperty
+listener = propriedades.ConstructedBufferSimplesCorrectlyProperty
+listener = propriedades.InserirCorrectlyProperty
+listener = propriedades.RecuperarCorrectlyProperty
